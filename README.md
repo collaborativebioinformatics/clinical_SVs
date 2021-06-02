@@ -2,13 +2,11 @@
 
 Clinically reportable structural variant calls
 
-LOGO
-
 ## Goals
 
 Write a **workflow and/or app** to **annotate structural variants** (SVs) calls with **clinically relevant information**.
 
-Eventually, the workflow could call the SVs from sequencing reads (e.g. from a BAM file).
+Eventually, the workflow could call the SVs from sequencing reads (e.g. from a BAM file) and extract some QC information from raw reads.
 
 ## Overview Diagram
 
@@ -36,11 +34,11 @@ The output will be a set of graphs (image files)
 
 Two ways to use our tools:
 
-1. A command-line workflow that can do
+1. A **command-line workflow** that can do
    - SV discovery
    - Annotation
    - Automated QC graphs of supporting reads
-1. An interactive app to annotate a VCF with SV calls and visualize the results.
+1. An **interactive app** to annotate a VCF with SV calls and visualize the results.
    - Building on GeneVar but now the user can upload their own VCF
 
 ### SV calling
