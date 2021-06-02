@@ -89,7 +89,7 @@ The `server.R` file of the app can also use the same approach: source the same f
    - Known clinical SVs in dbVar can be downloaded at `https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/tsv/nstd102.GRCh38.variant_call.tsv.gz`
    - This TSV was parsed in GeneVar with [this command line](https://github.com/collaborativebioinformatics/GeneVar/blob/3db5b83f0c61e4aa1ab80022b32864cb8b623017/scripts/Snakefile#L123-L127)
    - These variants could be matched using the same approach as in the frequency annotation.
-- [ ] [`geneFunctionalAnnotation.R`] (geneFunctionalAnnotation.R)
+- [ ] [`geneFunctionalAnnotation.R`](geneFunctionalAnnotation.R)
    - Need a list of list of genes similar to `demo/listofENSEMBLID.txt` (Other than ENTREZ Gene ID; such as SYMBOL / REFSEQ / ENSEMBL) to output a three types of Disease Ontology plots such as `(demo/geneAnnotation.png)` including a barplot (high level catogory), a dot plot (show upto 20 diseases association) and a disease-gene network graph.
    - The list of genes can be extracted from annotated vcf based on any SV types.
 
