@@ -60,7 +60,7 @@ The `server.R` file of the app can also use the same approach: source the same f
    - See [annotation function in GeneVar server.R](https://github.com/collaborativebioinformatics/GeneVar/blob/3db5b83f0c61e4aa1ab80022b32864cb8b623017/shinyapp/server.R#L32-L56)
 - [ ] [`annotate_frequency.R`](annotate_frequency.R) 
    - **TODO**. Currently returns dummy test values.
-   - Jean will upload gnomAD-SV VCF for GRCh38 (easier that dealing with hg19).
+   - See uploaded gnomAD-SV TSV for GRCh38 (easier that dealing with hg19) in the DNAnexus project: `gnomad_v2.1_sv.sites.lifted.tsv.gz`
    - See [GeneVar script for frequency annotation](https://github.com/collaborativebioinformatics/GeneVar/blob/whole-genome/scripts/annotate_freq.R)
    - See [GeneVar script to format the gnomAD-SV fields](https://github.com/collaborativebioinformatics/GeneVar/blob/whole-genome/scripts/prepare_gnomadsv_freq.R) (maybe not as relevant).
 - [ ] [`annotate_known_clinical_SVs.R`](annotate_known_clinical_SVs.R)
