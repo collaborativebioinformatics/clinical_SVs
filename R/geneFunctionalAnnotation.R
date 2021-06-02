@@ -20,9 +20,9 @@ listofgene = args[1] #list of genes
 pvalueCutoff = as.numeric(args[2]) #the minimum p value for enriched GO and pathways
 GeneIDtype = as.character(args[3]) #ID should be one of: SYMBOL,REFSEQ,ENSEMBL (## case sensitive)
 
-listofgene = "listofENSEMBLID.txt"
-pvalueCutoff = 0.05
-GeneIDtype = "ENSEMBL"
+# listofgene = "listofENSEMBLID.txt"
+# pvalueCutoff = 0.05
+# GeneIDtype = "ENSEMBL"
 
 listofgene <- read.table(listofgene, header = F)
 listofgene <- listofgene[,1]
