@@ -16,13 +16,17 @@ Eventually, the workflow could call the SVs from sequencing reads (e.g. from a B
 
 ## Notes/Documentation
 
-The new fields in the annotated VCF will be:
+For the *gene-level* metrics, the relevant (new) fields in the annotated VCF will be:
 
 | name   | description                           |
 |--------|---------------------------------------|
 | AF     | Allele frequency                      |
 | CLINSV | the ids of matching known clinical SV |
 | GENE   | name of the gene(s) overlapped        |
+
+We will also run a gene set enrichment and highlight SVs in enriched pathways/diseases.
+This is will represent a set of *patient-level* metrics.
+The output will be a set of graphs (image files) 
 
 ## Installation
 
@@ -37,6 +41,7 @@ Two ways to use our tools:
    - Annotation
    - Automated QC graphs of supporting reads
 1. An interactive app to annotate a VCF with SV calls and visualize the results.
+   - Building on GeneVar but now the user can upload their own VCF
 
 ### SV calling
 
