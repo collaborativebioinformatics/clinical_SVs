@@ -58,8 +58,16 @@ The `server.R` file of the app can also use the same approach: source the same f
    - In GeneVar, the gencode annotation was downloaded from `ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_35/gencode.v35.annotation.gff3.gz`
    - See [script to prepare gencode annotation from GeneVar](https://github.com/collaborativebioinformatics/GeneVar/blob/whole-genome/scripts/prepare_gencode.R)
    - See [annotation function in GeneVar server.R](https://github.com/collaborativebioinformatics/GeneVar/blob/3db5b83f0c61e4aa1ab80022b32864cb8b623017/shinyapp/server.R#L32-L56)
-- [ ] [`annotate_frequency.R`](annotate_frequency.R) TODO. Currently returns dummy test values.
-- [ ] [`annotate_known_clinical_SVs.R`](annotate_known_clinical_SVs.R) TODO. Currently returns dummy test values.
+- [ ] [`annotate_frequency.R`](annotate_frequency.R) 
+   - **TODO**. Currently returns dummy test values.
+   - Jean will upload gnomAD-SV VCF for GRCh38 (easier that dealing with hg19).
+   - See [GeneVar script for frequency annotation](https://github.com/collaborativebioinformatics/GeneVar/blob/whole-genome/scripts/annotate_freq.R)
+   - See [GeneVar script to format the gnomAD-SV fields](https://github.com/collaborativebioinformatics/GeneVar/blob/whole-genome/scripts/prepare_gnomadsv_freq.R) (maybe not as relevant).
+- [ ] [`annotate_known_clinical_SVs.R`](annotate_known_clinical_SVs.R)
+   - **TODO**. Currently returns dummy test values.
+   - Known clinical SVs in dbVar can be downloaded at `https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/tsv/nstd102.GRCh38.variant_call.tsv.gz`
+   - This TSV was parsed in GeneVar with [this command line](https://github.com/collaborativebioinformatics/GeneVar/blob/3db5b83f0c61e4aa1ab80022b32864cb8b623017/scripts/Snakefile#L123-L127)
+   - These variants could be matched using the same approach as in the frequency annotation.
 - [ ] ???
 
 ### Visualization of aligned reads around a SV
