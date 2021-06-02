@@ -90,7 +90,7 @@ The `server.R` file of the app can also use the same approach: source the same f
    - This TSV was parsed in GeneVar with [this command line](https://github.com/collaborativebioinformatics/GeneVar/blob/3db5b83f0c61e4aa1ab80022b32864cb8b623017/scripts/Snakefile#L123-L127)
    - These variants could be matched using the same approach as in the frequency annotation.
 - [ ] [`geneFunctionalAnnotation.R`] (geneFunctionalAnnotation.R)
-   - Need a list of list of genes similar to `listofENSEMBLID.txt` (Other than ENTREZ Gene ID; such as SYMBOL / REFSEQ / ENSEMBL) to output a three types of Disease Ontology plots such as `(geneAnnotation.png)` including a barplot (high level catogory), a dot plot (show upto 20 diseases association) and a disease-gene network graph.
+   - Need a list of list of genes similar to `demo/listofENSEMBLID.txt` (Other than ENTREZ Gene ID; such as SYMBOL / REFSEQ / ENSEMBL) to output a three types of Disease Ontology plots such as `(demo/geneAnnotation.png)` including a barplot (high level catogory), a dot plot (show upto 20 diseases association) and a disease-gene network graph.
    - The list of genes can be extracted from annotated vcf based on any SV types.
 
 ### Visualization of aligned reads around a SV
