@@ -53,7 +53,11 @@ The `server.R` file of the app can also use the same approach: source the same f
 
 #### Annotation modules
 
-- [ ] [`annotate_genes.R`](annotate_genes.R) TODO. Currently returns dummy test values.
+- [ ] [`annotate_genes.R`](annotate_genes.R) 
+   - **TODO**. Currently returns dummy test values.
+   - In GeneVar, the gencode annotation was downloaded from `ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_35/gencode.v35.annotation.gff3.gz`
+   - See [script to prepare gencode annotation from GeneVar](https://github.com/collaborativebioinformatics/GeneVar/blob/whole-genome/scripts/prepare_gencode.R)
+   - See [annotation function in GeneVar server.R](https://github.com/collaborativebioinformatics/GeneVar/blob/3db5b83f0c61e4aa1ab80022b32864cb8b623017/shinyapp/server.R#L32-L56)
 - [ ] [`annotate_frequency.R`](annotate_frequency.R) TODO. Currently returns dummy test values.
 - [ ] [`annotate_known_clinical_SVs.R`](annotate_known_clinical_SVs.R) TODO. Currently returns dummy test values.
 - [ ] ???
