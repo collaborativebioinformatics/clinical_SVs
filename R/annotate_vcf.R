@@ -20,8 +20,9 @@ if(length(args) == 0){
 load(annot.rdata)
 
 ## read VCF
-suppressWarnings(suppressMessages(library(VariantAnnotation)))
-vcf.o = readVcf(in.vcf)
+suppressWarnings(suppressMessages(library(sveval)))
+suppressWarnings(suppressMessages(library(GenomicRanges)))
+vcf.o = readSVvcf(in.vcf, out.fmt='vcf', keep.ids=TRUE)
 
 ## make sure chromosomes are in the form 'chrX'
 if(all(!grepl('chr', seqlevels(vcf.o)))){
@@ -40,6 +41,13 @@ vcf.o = annotate_frequency(vcf.o, gnomad)
 source('annotate_known_clinical_SVs.R')
 vcf.o = annotate_known_clinical_SVs(vcf.o, clinsv)
 
+## clinical ranks, to order the SVs and select top 5 for example
+## TEMP: dummy values for now
+hh = S4Vectors::DataFrame(Number='1', Type='Integer', Description='Clinical rank')
+rownames(hh) = 'CLINRK'
+info(header(vcf.o)) = rbind(info(header(vcf.o)), hh)
+info(vcf.o)$CLINRK = sample.int(length(vcf.o))
+
 ## write annotated VCF
 writeVcf(vcf.o, file=out.vcf)
 
@@ -52,6 +60,7 @@ svs = tibble(gene=info(vcf.o)$GENE,
              size=abs(unlist(lapply(info(vcf.o)$SVLEN, '[', 1))),
              frequency=info(vcf.o)$AF,
              svtype=info(vcf.o)$SVTYPE,
-             clinsv=info(vcf.o)$CLINSV)
+             clinsv=info(vcf.o)$CLINSV,
+             clinrk=info(vcf.o)$CLINRK)
 
 write.table(svs, file=out.csv, sep=',', quote=TRUE, row.names=FALSE)

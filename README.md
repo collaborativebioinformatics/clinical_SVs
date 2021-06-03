@@ -35,7 +35,9 @@ Eventually, the workflow could call the SVs from sequencing reads (e.g. from a B
 
 ## Notes/Documentation
 
-For the *gene-level* metrics, the table contains the following columns.
+- Example file on [our test data](#test-data): [`test.clinical.sv.csv`](testdata/test.clinical.sv.csv)
+
+The table contains the following columns.
 
 | name       | description                                                           |
 |------------|-----------------------------------------------------------------------|
@@ -48,8 +50,7 @@ For the *gene-level* metrics, the table contains the following columns.
 | frequency  | allele frequency                                                      |
 | svtype     | type of SV. E.g. DEL, DUP, INS, ...                                   |
 | clinsv     | dbVar accession IDs of matching known clinical SVs (separated by `\|` |
-	
-See [`NA19461.clinicalsv.csv`](R/NA19461.clinicalsv.csv) for an example on our test data (NA19461 called with parliament2 see [`python_scripts`](python_scripts))
+| clinrk     | clinical importance rank, for example to select top 5 SVs             |
 
 We will also run a gene set enrichment and highlight SVs in enriched pathways/diseases.
 This is will represent a set of *patient-level* metrics.
@@ -71,16 +72,15 @@ To annotate a VCF with SV calls:
 
 ```
 cd R
-
 Rscript prepare_annotation_data.R annotation_data.RData   ## download and prepare annotations (makes 'annotation_data.RData')
-
 Rscript annotate_vcf.R input.vcf annotation_data.RData output.vcf output.csv
 ```
 
-For example, for the 1000GP sample that was SV called in [`python_scripts`](python_scripts):
+For example, for the [test data](#test-data)
 
 ```
-Rscript annotate_vcf.R ../python_scripts/NA19461.final.manta.diploidSV.vcf annotation_data.RData NA19461.clinicalsv.vcf NA19461.clinicalsv.csv
+cd R
+Rscript annotate_vcf.R ../testdata/test.input.vcf annotation_data.RData ../testdata/test.clinical.sv.vcf ../testdata/test.clinical.sv.csv
 ```
 
 ## Component Details
@@ -130,3 +130,15 @@ The resources used in the modules are downloaded and prepared by the [`prepare_a
 
 We could show the reads around a SV as a quality control if the BAM is available.
 Either invent our own graph (for example in python), or run an existing tool like [samplot](https://github.com/ryanlayer/samplot).
+
+
+## Test data
+
+A 1000GP sample was SV called in [`python_scripts`](python_scripts) using parliament2.
+For testing, we inject a SV that looks a bit like a known deletion in familial ovarian cancer.
+
+```sh
+grep "#" python_scripts/NA19461.final.manta.diploidSV.vcf > testdata/test.input.vcf
+grep -v "#" python_scripts/NA19461.final.manta.diploidSV.vcf | awk '{if($7=="PASS"){print $0}}' >> testdata/test.input.vcf
+cat testdata/add-for-test.vcf >> testdata/test.input.vcf
+```
