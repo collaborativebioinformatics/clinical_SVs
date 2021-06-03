@@ -119,7 +119,7 @@ The resources used in the modules are downloaded and prepared by the [`prepare_a
 - [x] [`annotate_known_clinical_SVs.R`](R/annotate_known_clinical_SVs.R)
    - Known clinical SVs: dbVar *nstd102* study
 - [ ] [`geneFunctionalAnnotation.R`](R/geneFunctionalAnnotation.R)
-   - Need a list of list of genes similar to `demo/listofENSEMBLID.txt` (Other than ENTREZ Gene ID; such as SYMBOL / REFSEQ / ENSEMBL) to output a three types of Disease Ontology plots such as `(demo/geneAnnotation.png)` including a barplot (high level catogory), a dot plot (show upto 20 diseases association) and a disease-gene network graph.
+   - Need a list of genes similar to `demo/listofENSEMBLID.txt` (Other than ENTREZ Gene ID; such as SYMBOL / REFSEQ / ENSEMBL) to output a three types of Disease Ontology plots such as `(demo/geneAnnotation.png)` including a barplot (high level catogory), a dot plot (show upto 20 diseases association) and a disease-gene network graph.
    - The list of genes can be extracted from annotated vcf based on any SV types.
 - [ ] Known SVs in cancer from COSMIC?
 
