@@ -54,6 +54,14 @@ The output will be a set of graphs (image files)
 
 ## Installation
 
+Install R packages. 
+In R:
+
+```r
+install.packages(c('BiocManager', 'dplyr'))
+BiocManager(c('GenomicRanges', 'rtracklayer', 'VariantAnnotation', 'jmonlong/sveval'))
+```
+
 ## Quick Start
 
 To annotate a VCF with SV calls:
