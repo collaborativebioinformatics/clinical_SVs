@@ -49,7 +49,7 @@ For the *gene-level* metrics, the table contains the following columns.
 | svtype     | type of SV. E.g. DEL, DUP, INS, ...                                   |
 | clinsv     | dbVar accession IDs of matching known clinical SVs (separated by `\|` |
 	
-See [`clinical-sv-table.csv`](R/clinical-sv-table.csv) for an example on our test data (HG002 from GIAB).
+See [`NA19461.clinicalsv.csv`](R/NA19461.clinicalsv.csv) for an example on our test data (NA19461 called with parliament2 see [`python_scripts`](python_scripts))
 
 We will also run a gene set enrichment and highlight SVs in enriched pathways/diseases.
 This is will represent a set of *patient-level* metrics.
