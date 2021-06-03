@@ -36,7 +36,7 @@ For the *gene-level* metrics, the table contains the following columns.
 
 | name       | description                                                            |
 |------------|------------------------------------------------------------------------|
-| gene       | names of genes overlapped, separated by `\\|`                          |
+| gene       | names of genes overlapped, separated by `\|`                          |
 | variant_id | SV ID                                                                  |
 | chr        | chromosome name                                                        |
 | start      | start position                                                         |
@@ -44,7 +44,7 @@ For the *gene-level* metrics, the table contains the following columns.
 | size       | size of the SV in bp                                                   |
 | frequency  | allele frequency                                                       |
 | svtype     | type of SV. E.g. DEL, DUP, INS, ...                                    |
-| clinsv     | dbVar accession IDs of matching known clinical SVs (separated by `\\|` |
+| clinsv     | dbVar accession IDs of matching known clinical SVs (separated by `\|` |
 
 See [`clinical-sv-table.csv`](R/clinical-sv-table.csv) for an example on our test data (HG002 from GIAB).
 
