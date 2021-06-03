@@ -1,9 +1,17 @@
-library(rtracklayer)
-library(GenomicRanges)
-library(dplyr)
+message('Loading packages...')
+suppressWarnings(suppressMessages(library(rtracklayer)))
+suppressWarnings(suppressMessages(library(GenomicRanges)))
+suppressWarnings(suppressMessages(library(dplyr)))
+
+## arguments: output filename
+args = commandArgs(TRUE)
+out.rdata = 'annotation_data.RData'
+if(length(args) > 0){
+  out.rdata = args[1]
+}
 
 ##
-## Gene annotation from gencode
+message('Gene annotation from gencode...')
 ##
 if(!file.exists('gencode.v35.annotation.gff3.gz')){
   download.file('ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_35/gencode.v35.annotation.gff3.gz', 'gencode.v35.annotation.gff3.gz')
@@ -20,8 +28,9 @@ genc = genc %>% as.data.frame %>%
   makeGRangesFromDataFrame(keep.extra.columns=TRUE)
 
 ##
-## gnomAD-SV SV catalog with frequencies
+message('gnomAD-SV SV catalog with frequencies...')
 ##
+## gnomad_v2.1_sv.sites.lifted.tsv.gz has been saved in our dnanexus project space
 gnomad = read.table('gnomad_v2.1_sv.sites.lifted.tsv.gz', as.is=TRUE, header=TRUE)
 ## match frequency to variant
 matchAF <- function(df){
@@ -42,7 +51,7 @@ gnomad = gnomad %>% mutate(type=ifelse(grepl('<CN=', alt), 'DUP', type),
 gnomad = gnomad %>% select(-qual) %>% makeGRangesFromDataFrame(keep.extra.columns=TRUE)
 
 ##
-## known clinical SVs
+message('Known clinical SVs...')
 ##
 if(!file.exists('nstd102.GRCh38.variant_call.tsv.gz')){
   download.file('https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/tsv/nstd102.GRCh38.variant_call.tsv.gz', 'nstd102.GRCh38.variant_call.tsv.gz')
@@ -72,6 +81,7 @@ clinsv = clinsv[, c(1,3,8,10:16,37)] %>%
 ##
 ## save in one file
 ##
-save(genc, gnomad, clinsv, file='annotation_data.RData')
+message('Save annotation to ', out.rdata, '...')
+save(genc, gnomad, clinsv, file=out.rdata)
 
 

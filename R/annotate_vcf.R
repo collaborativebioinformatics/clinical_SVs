@@ -1,20 +1,23 @@
-## args = commandArgs(TRUE)
-## in.vcf = args[1]
-## out.vcf = args[2]
-## out.csv = args[3]
-
-## test data
-## downloaded from ftp://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/data/AshkenazimTrio/analysis/NIST_SVs_Integration_v0.6/
-if(!file.exists('HG002_SVs_Tier1_v0.6.vcf.gz')){
-  download.file('ftp://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/data/AshkenazimTrio/analysis/NIST_SVs_Integration_v0.6/HG002_SVs_Tier1_v0.6.vcf.gz', 'HG002_SVs_Tier1_v0.6.vcf.gz')
+args = commandArgs(TRUE)
+if(length(args) == 0){
+  ## if no arguments given, download and use a test data
+  if(!file.exists('HG002_SVs_Tier1_v0.6.vcf.gz')){
+    download.file('ftp://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/data/AshkenazimTrio/analysis/NIST_SVs_Integration_v0.6/HG002_SVs_Tier1_v0.6.vcf.gz', 'HG002_SVs_Tier1_v0.6.vcf.gz')
+  }
+  in.vcf = 'HG002_SVs_Tier1_v0.6.vcf.gz'
+  annot.rdata = 'annotation_data.RData'
+  out.vcf = 'clinical-sv-annotated.vcf'
+  out.csv = 'clinical-sv-table.csv'
+} else {
+  in.vcf = args[1]
+  annot.rdata = args[2]
+  out.vcf = args[3]
+  out.csv = args[4]
 }
-in.vcf = 'HG002_SVs_Tier1_v0.6.vcf.gz'
-out.vcf = 'clinical-sv-annotated.vcf'
-out.csv = 'clinical-sv-table.csv'
 
 ## annotation data contains pre-formatted annotation (e.g. genes, clinical svs)
 ## see prepare_annotation_data.R
-load('annotation_data.RData')
+load(annot.rdata)
 
 ## read VCF
 suppressWarnings(suppressMessages(library(VariantAnnotation)))

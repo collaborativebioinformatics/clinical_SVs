@@ -34,18 +34,18 @@ Eventually, the workflow could call the SVs from sequencing reads (e.g. from a B
 
 For the *gene-level* metrics, the table contains the following columns.
 
-| name       | description                                                            |
-|------------|------------------------------------------------------------------------|
+| name       | description                                                           |
+|------------|-----------------------------------------------------------------------|
 | gene       | names of genes overlapped, separated by `\|`                          |
-| variant_id | SV ID                                                                  |
-| chr        | chromosome name                                                        |
-| start      | start position                                                         |
-| end        | end position                                                           |
-| size       | size of the SV in bp                                                   |
-| frequency  | allele frequency                                                       |
-| svtype     | type of SV. E.g. DEL, DUP, INS, ...                                    |
+| variant_id | SV ID                                                                 |
+| chr        | chromosome name                                                       |
+| start      | start position                                                        |
+| end        | end position                                                          |
+| size       | size of the SV in bp                                                  |
+| frequency  | allele frequency                                                      |
+| svtype     | type of SV. E.g. DEL, DUP, INS, ...                                   |
 | clinsv     | dbVar accession IDs of matching known clinical SVs (separated by `\|` |
-
+	
 See [`clinical-sv-table.csv`](R/clinical-sv-table.csv) for an example on our test data (HG002 from GIAB).
 
 We will also run a gene set enrichment and highlight SVs in enriched pathways/diseases.
@@ -55,6 +55,22 @@ The output will be a set of graphs (image files)
 ## Installation
 
 ## Quick Start
+
+To annotate a VCF with SV calls:
+
+```
+cd R
+
+Rscript prepare_annotation_data.R annotation_data.RData   ## download and prepare annotations (makes 'annotation_data.RData')
+
+Rscript annotate_vcf.R input.vcf annotation_data.RData output.vcf output.csv
+```
+
+For example, for the 1000GP sample that was SV called in [`python_scripts`](python_scripts):
+
+```
+Rscript annotate_vcf.R ../python_scripts/NA19461.final.manta.diploidSV.vcf annotation_data.RData NA19461.clinicalsv.vcf NA19461.clinicalsv.csv
+```
 
 ## Component Details
 
