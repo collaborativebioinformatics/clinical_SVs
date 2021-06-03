@@ -6,8 +6,8 @@ The parameters for the program are as following
 Chromosome ID (eg.. chr1, chr2)
 VCF filename (and location if not in the same folder)
 
-Example command:
+Example command:\
 `python VCFanalyse.py chr2 NA19461.final.manta.diploidSV.vcf`
 
-Example output for Chromosome 2 for the example command above:
+Example output for Chromosome 2 for the example command above:\
 <img src="https://github.com/collaborativebioinformatics/clinical_SVs/blob/main/python_scripts/output.png" width="250">
