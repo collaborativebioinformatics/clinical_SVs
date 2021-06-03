@@ -12,7 +12,7 @@ Jean Monlong  - `Lead, Liaison`
 
 Rupesh Kesharwani - `Sysadmin and code developer`
 
-Pranav Khade - `Data Guru and code Developer`
+Pranav Khade - `Data Guru and curator`
 
 Weiyu Zhou - `App Developer`
 
@@ -68,20 +68,28 @@ BiocManager(c('GenomicRanges', 'rtracklayer', 'VariantAnnotation', 'jmonlong/sve
 
 ## Quick Start
 
-To annotate a VCF with SV calls:
+####To annotate a VCF with SV calls:
 
 ```
-cd R
-Rscript prepare_annotation_data.R annotation_data.RData   ## download and prepare annotations (makes 'annotation_data.RData')
-Rscript annotate_vcf.R input.vcf annotation_data.RData output.vcf output.csv
+Rscript R/prepare_annotation_data.R annotation_data.RData   ## download and prepare annotations (makes 'annotation_data.RData')
+Rscript R/annotate_vcf.R input.vcf annotation_data.RData output.vcf output.csv
 ```
 
-For example, for the [test data](#test-data)
+####For example, for the [test data](#test-data)
 
 ```
-cd R
-Rscript annotate_vcf.R ../testdata/test.input.vcf annotation_data.RData ../testdata/test.clinical.sv.vcf ../testdata/test.clinical.sv.csv
+Rscript R/annotate_vcf.R testdata/test.input.vcf annotation_data.RData testdata/test.clinical.sv.vcf testdata/test.clinical.sv.csv
 ```
+
+####Test gene disease ontology, gene-disease association and pathways by KEGG and Reactome
+
+```
+cd demo_output
+
+Rscript ../R/geneFunctionalAnnotation.R listofENSEMBLID.txt 0.05 EMSEMBL
+
+```
+
 
 ## Component Details
 
