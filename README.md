@@ -18,7 +18,10 @@ Weiyu Zhou - `App Developer`
 
 Ahmad Al Khleifat - `Writer`
 
+## Slide deck
 
+- [Google Slide live deck](https://docs.google.com/presentation/d/1il5xxWTMZ21IPLAy20KemnufYfgCAwfHNzxukKSW3e4/edit?usp=sharing)
+- Local backup: [SV-Clinic.odp](SV-Clinic.odp)
 
 ## Goals
 
