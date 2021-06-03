@@ -32,13 +32,21 @@ Eventually, the workflow could call the SVs from sequencing reads (e.g. from a B
 
 ## Notes/Documentation
 
-For the *gene-level* metrics, the relevant (new) fields in the annotated VCF will be:
+For the *gene-level* metrics, the table contains the following columns.
 
-| name   | description                           |
-|--------|---------------------------------------|
-| AF     | Allele frequency                      |
-| CLINSV | the ids of matching known clinical SV |
-| GENE   | name of the gene(s) overlapped        |
+| name       | description                                                            |
+|------------|------------------------------------------------------------------------|
+| gene       | names of genes overlapped, separated by `\\|`                          |
+| variant_id | SV ID                                                                  |
+| chr        | chromosome name                                                        |
+| start      | start position                                                         |
+| end        | end position                                                           |
+| size       | size of the SV in bp                                                   |
+| frequency  | allele frequency                                                       |
+| svtype     | type of SV. E.g. DEL, DUP, INS, ...                                    |
+| clinsv     | dbVar accession IDs of matching known clinical SVs (separated by `\\|` |
+
+See [`clinical-sv-table.csv`](R/clinical-sv-table.csv) for an example on our test data (HG002 from GIAB).
 
 We will also run a gene set enrichment and highlight SVs in enriched pathways/diseases.
 This is will represent a set of *patient-level* metrics.
@@ -74,24 +82,22 @@ The `server.R` file of the app can also use the same approach: source the same f
 
 #### Annotation modules
 
-- [ ] [`annotate_genes.R`](R/annotate_genes.R) 
-   - **TODO**. Currently returns dummy test values.
-   - In GeneVar, the gencode annotation was downloaded from `ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_35/gencode.v35.annotation.gff3.gz`
-   - See [script to prepare gencode annotation from GeneVar](https://github.com/collaborativebioinformatics/GeneVar/blob/whole-genome/scripts/prepare_gencode.R)
-   - See [annotation function in GeneVar server.R](https://github.com/collaborativebioinformatics/GeneVar/blob/3db5b83f0c61e4aa1ab80022b32864cb8b623017/shinyapp/server.R#L32-L56)
-- [ ] [`annotate_frequency.R`](R/annotate_frequency.R) 
-   - **TODO**. Currently returns dummy test values.
-   - See uploaded gnomAD-SV TSV for GRCh38 (easier that dealing with hg19) in the DNAnexus project: `gnomad_v2.1_sv.sites.lifted.tsv.gz`
-   - See [GeneVar script for frequency annotation](https://github.com/collaborativebioinformatics/GeneVar/blob/whole-genome/scripts/annotate_freq.R)
-   - See [GeneVar script to format the gnomAD-SV fields](https://github.com/collaborativebioinformatics/GeneVar/blob/whole-genome/scripts/prepare_gnomadsv_freq.R) (maybe not as relevant).
-- [ ] [`annotate_known_clinical_SVs.R`](R/annotate_known_clinical_SVs.R)
-   - **TODO**. Currently returns dummy test values.
-   - Known clinical SVs in dbVar can be downloaded at `https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/tsv/nstd102.GRCh38.variant_call.tsv.gz`
-   - This TSV was parsed in GeneVar with [this command line](https://github.com/collaborativebioinformatics/GeneVar/blob/3db5b83f0c61e4aa1ab80022b32864cb8b623017/scripts/Snakefile#L123-L127)
-   - These variants could be matched using the same approach as in the frequency annotation.
+The resources used in the modules are downloaded and prepared by the [`prepare_annotation_data.R`](R/prepare_annotation_data.R). 
+
+- [X] [`annotate_genes.R`](R/annotate_genes.R) 
+   - Gencode v35
+   - Filter: keeps only SVs overlapping CDS regions.
+   - Uses a "wide" format: new field *GENE* lists all genes overlapped separated by `|`.
+- [X] [`annotate_frequency.R`](R/annotate_frequency.R) 
+   - Uses the position and the *SVLEN*, *SVTYPE* fields to match SVs in the gnomAD-SV catalog (i.e. make sure the SV calls contains these fields).
+   - Lenient matching criteria: 10% minimum reciprocal overlap; insertions can be as distant as 100 bp.
+   - New field *AF* reports the maximum frequency across all the SVs matched in gnomAD-SV.
+- [x] [`annotate_known_clinical_SVs.R`](R/annotate_known_clinical_SVs.R)
+   - Known clinical SVs: dbVar *nstd102* study
 - [ ] [`geneFunctionalAnnotation.R`](R/geneFunctionalAnnotation.R)
    - Need a list of list of genes similar to `demo/listofENSEMBLID.txt` (Other than ENTREZ Gene ID; such as SYMBOL / REFSEQ / ENSEMBL) to output a three types of Disease Ontology plots such as `(demo/geneAnnotation.png)` including a barplot (high level catogory), a dot plot (show upto 20 diseases association) and a disease-gene network graph.
    - The list of genes can be extracted from annotated vcf based on any SV types.
+- [ ] Known SVs in cancer from COSMIC?
 
 ### Visualization of aligned reads around a SV
 
