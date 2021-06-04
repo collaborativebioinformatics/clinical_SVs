@@ -14,4 +14,4 @@ Example command:\
 `python VCFanalyse.py -vcf NA19461.final.manta.diploidSV.vcf -chr chr2 -bins 100 -minlen 100`
 
 Example output for Chromosome 2 for the example command above:\
-<img src="https://github.com/collaborativebioinformatics/clinical_SVs/blob/main/python_scripts/output.png">
+<img src="https://github.com/collaborativebioinformatics/clinical_SVs/blob/main/VCF%20analysis/output.png">
