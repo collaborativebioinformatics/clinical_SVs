@@ -62,8 +62,12 @@ Install R packages.
 In R:
 
 ```r
-install.packages(c('BiocManager', 'dplyr'))
-BiocManager(c('GenomicRanges', 'rtracklayer', 'VariantAnnotation', 'jmonlong/sveval'))
+if(!"easypackages" %in% row.names(installed.packages())){
+  install.packages("BiocManager", repos = "https://cloud.r-project.org")
+  library(easypackages, character.only = TRUE, quietly = TRUE)
+}
+pkgs=c("clusterProfiler","org.Hs.eg.db","DOSE","ggnewscale","cowplot","tidyverse","plyr","ReactomePA","reactome.db","reactome.db","KEGG.db","enrichplot","dplyr","GenomicRanges", "rtracklayer", "VariantAnnotation", "jmonlong/sveval")
+suppressWarnings(suppressMessages(easypackages::packages(pkgs, prompt = FALSE)))
 ```
 
 ## Quick Start
