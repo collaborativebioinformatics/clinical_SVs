@@ -66,7 +66,7 @@ if(!"easypackages" %in% row.names(installed.packages())){
   install.packages("BiocManager", repos = "https://cloud.r-project.org")
   library(easypackages, character.only = TRUE, quietly = TRUE)
 }
-pkgs=c("clusterProfiler","org.Hs.eg.db","DOSE","ggnewscale","cowplot","tidyverse","plyr","ReactomePA","reactome.db","reactome.db","KEGG.db","enrichplot","dplyr","GenomicRanges", "rtracklayer", "VariantAnnotation", "jmonlong/sveval")
+pkgs=c("shiny","tippy","shinythemes", "tidyverse", "tidygraph", "clusterProfiler","org.Hs.eg.db","DOSE","ggnewscale","cowplot","tidyverse","plyr","ReactomePA","reactome.db","reactome.db","KEGG.db","enrichplot","dplyr","GenomicRanges", "rtracklayer", "VariantAnnotation", "jmonlong/sveval")
 suppressWarnings(suppressMessages(easypackages::packages(pkgs, prompt = FALSE)))
 ```
 
@@ -89,9 +89,7 @@ Rscript R/annotate_vcf.R testdata/test.input.vcf annotation_data.RData testdata/
 
 ```
 cd demo_output
-
 Rscript ../R/geneFunctionalAnnotation.R listofENSEMBLID.txt 0.05 EMSEMBL
-
 ```
 
 
