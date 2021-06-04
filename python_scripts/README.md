@@ -5,11 +5,13 @@ This script takes a VCF file as input. It analyzes the chromosome by dividing th
 **Please note that I have added a VCF parser and data processing functions in the python file(s). In the future, it might be helpful and help other people.**
 
 The parameters for the program are as following
-Chromosome ID (eg.. chr1, chr2)
-VCF filename (and location if not in the same folder)
+-chr Chromosome ID (eg.. chr1, chr2)
+-vcf VCF filename (and location if not in the same folder)
+-bins As described above.
+-minlen Cutoff length for the SV (Please note that SVTYPE BND does not have length defined)
 
 Example command:\
-`python VCFanalyse.py chr2 NA19461.final.manta.diploidSV.vcf`
+`python VCFanalyse.py -vcf NA19461.final.manta.diploidSV.vcf -chr chr2 -bins 100 -minlen 100`
 
 Example output for Chromosome 2 for the example command above:\
 <img src="https://github.com/collaborativebioinformatics/clinical_SVs/blob/main/python_scripts/output.png">
