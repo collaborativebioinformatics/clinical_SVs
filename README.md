@@ -16,7 +16,7 @@ Pranav Khade - `Data Guru and curator`
 
 Weiyu Zhou - `App Developer`
 
-Ahmad Al Khleifat - `Writer`
+Ahmad Al Khleifat - `Data Guru and Writer`
 
 ## Slide deck
 
