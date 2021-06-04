@@ -88,7 +88,7 @@ Rscript R/annotate_vcf.R testdata/test.input.vcf annotation_data.RData testdata/
 ####Test gene disease ontology, gene-disease association and pathways by KEGG and Reactome
 
 ```
-cd demo_outputs
+cd demo_output
 Rscript ../R/geneFunctionalAnnotation.R listofENSEMBLID.txt 0.05 EMSEMBL
 ```
 
