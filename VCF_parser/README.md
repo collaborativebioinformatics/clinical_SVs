@@ -2,6 +2,8 @@ VCFanalyse.py
 -------------
 This script takes a VCF file as input. It analyzes the chromosome by dividing the chromosome into 'n' number of the equal-sized bin (parameter bins) and counts the different types of structural variants (SVs) to plot them as a figure. It allows the user to analyze what parts of the chromosomes are most affected by what type of variation.
 
+This binning technique can also be used to create a patient SV profile to train a neural network model for patients for diagnosis and treatment (based on similarity with other successful treatments of the past) of patients
+
 **Please note that I have added a VCF parser and data processing functions in the python file(s). In the future, it might be helpful and help other people.**
 
 The parameters for the program are as following
