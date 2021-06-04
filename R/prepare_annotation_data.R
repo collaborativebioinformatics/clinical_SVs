@@ -73,15 +73,32 @@ clinsv = clinsv[, c(1,3,8,10:16,37)] %>%
          start=ifelse(is.na(start), (inner_start+outer_start)/2, start),
          end=ifelse(is.na(stop), (inner_stop+outer_stop)/2, stop),
          size=ifelse(!is.na(insertion_length), insertion_length, end-start)) %>% 
-  select(chr, start, end, type, size, dbvar_id) %>% 
+  select(chr, start, end, type, size, dbvar_id, clinical_significance) %>% 
   filter(!is.na(type), !is.na(start), size>=50) %>%
   makeGRangesFromDataFrame(keep.extra.columns=TRUE)
 
+##
+message('Gene with high probability of loss-of-function intolerance...')
+##
+if(!file.exists('gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz')){
+  download.file('https://azureopendatastorage.blob.core.windows.net/gnomad/release/2.1.1/constraint/gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz', 'gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz')
+}
+pli = read.table('gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz', header=TRUE, as.is=TRUE, sep='\t')
+gene.pli = pli %>% filter(pLI>.9) %>% .$gene %>% unique
+
+##
+message('Gene associated with phenotype in OMIM...')
+##
+if(!file.exists('gene_list_terms.txt.gz')){
+  download.file('https://maayanlab.cloud/static/hdfs/harmonizome/data/omim/gene_list_terms.txt.gz', 'gene_list_terms.txt.gz')
+}
+omim = read.table('gene_list_terms.txt.gz', header=TRUE, as.is=TRUE, sep='\t')
+gene.omim = unique(omim$GeneSym)
 
 ##
 ## save in one file
 ##
 message('Save annotation to ', out.rdata, '...')
-save(genc, gnomad, clinsv, file=out.rdata)
+save(genc, gnomad, clinsv, gene.pli, gene.omim, file=out.rdata)
 
 

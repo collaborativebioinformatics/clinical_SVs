@@ -42,11 +42,8 @@ source('annotate_known_clinical_SVs.R')
 vcf.o = annotate_known_clinical_SVs(vcf.o, clinsv)
 
 ## clinical ranks, to order the SVs and select top 5 for example
-## TEMP: dummy values for now
-hh = S4Vectors::DataFrame(Number='1', Type='Integer', Description='Clinical rank')
-rownames(hh) = 'CLINRK'
-info(header(vcf.o)) = rbind(info(header(vcf.o)), hh)
-info(vcf.o)$CLINRK = sample.int(length(vcf.o))
+source('annotate_clinical_score.R')
+vcf.o = annotate_clinical_score(vcf.o)
 
 ## write annotated VCF
 writeVcf(vcf.o, file=out.vcf)
@@ -61,6 +58,7 @@ svs = tibble(gene=info(vcf.o)$GENE,
              frequency=info(vcf.o)$AF,
              svtype=info(vcf.o)$SVTYPE,
              clinsv=info(vcf.o)$CLINSV,
-             clinrk=info(vcf.o)$CLINRK)
+             clinrk=info(vcf.o)$CLINRK) %>%
+  arrange(clinrk)
 
 write.table(svs, file=out.csv, sep=',', quote=TRUE, row.names=FALSE)

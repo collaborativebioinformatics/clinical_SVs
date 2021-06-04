@@ -129,6 +129,13 @@ The resources used in the modules are downloaded and prepared by the [`prepare_a
    - New field *AF* reports the maximum frequency across all the SVs matched in gnomAD-SV.
 - [x] [`annotate_known_clinical_SVs.R`](R/annotate_known_clinical_SVs.R)
    - Known clinical SVs: dbVar *nstd102* study
+- [x] [`annotate_clinical_score.R`](R/annotate_clinical_score.R)
+   - ranks variants based on custom score
+   - a SV ranks higher if: 
+      - matches known clinical SVs
+	  - impact gene with predicted loss-of-function intolerance (pLI>.9)
+	  - impact gene from OMIM
+	  - break ties using the number of matched known clinical SVs, then number of genes affected
 - [ ] [`geneFunctionalAnnotation.R`](R/geneFunctionalAnnotation.R)
    - Need a list of genes similar to `demo/listofENSEMBLID.txt` (Other than ENTREZ Gene ID; such as SYMBOL / REFSEQ / ENSEMBL) to output a three types of Disease Ontology plots such as `(demo/geneAnnotation.png)` including a barplot (high level catogory), a dot plot (show upto 20 diseases association) and a disease-gene network graph.
    - The list of genes can be extracted from annotated vcf based on any SV types.

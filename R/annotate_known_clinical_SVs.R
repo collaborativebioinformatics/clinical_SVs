@@ -14,6 +14,9 @@ annotate_known_clinical_SVs <- function(vcf.o, clinsv){
 
   clins = rep(NA, length(vcf.o))
 
+  clsig = c('Pathogenic', 'Pathogenic/Likely pathogenic', 'Likely pathogenic')
+  clinsv = subset(clinsv, clinical_significance %in% clsig)
+  
   clin.ol =  svOverlap(svs.gr, clinsv, min.ol=.5, max.ins.dist=100) %>% as.data.frame
   if(nrow(clin.ol)>0){
     clin.ol = clin.ol %>% mutate(dbvar_id=clinsv$dbvar_id[subjectHits]) %>%
