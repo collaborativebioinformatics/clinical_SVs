@@ -58,7 +58,7 @@ if(!file.exists('nstd102.GRCh38.variant_call.tsv.gz')){
 }
 clinsv = read.table('nstd102.GRCh38.variant_call.tsv.gz', as.is=TRUE, skip=1, comment='', sep='\t', header=TRUE)
 clinsv = clinsv[, c(1,3,8,10:16,37)] %>%
-  rename(dbvar_id=X.variant_call_accession) %>%
+  dplyr::rename(dbvar_id=X.variant_call_accession) %>%
   mutate(chr=paste0('chr', chr), 
          type=ifelse(grepl('gain', variant_call_type), 'DUP', NA),
          type=ifelse(grepl('loss', variant_call_type), 'DEL', type),
