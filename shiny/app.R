@@ -32,8 +32,8 @@ annotate_vcf <- function(in.vcf, annot.rdata, out.vcf, out.csv){
   vcf.o = annotate_known_clinical_SVs(vcf.o, clinsv)
 
   ## clinical ranks, to order the SVs and select top 5 for example
-  source('annotate_clinical_score.R')
-  vcf.o = annotate_clinical_score(vcf.o,genc)
+  # source('annotate_clinical_score.R')
+  # vcf.o = annotate_clinical_score(vcf.o,genc)
 
   ## write annotated VCF
   writeVcf(vcf.o, file=out.vcf)
@@ -156,7 +156,7 @@ sv <- function(){
                           fileInput(
                             "file",
                             label = "Upload the VCF file (.vcf)",
-                            accept = c(".vcf"),
+                            accept = c(".vcf","text/csv","text/comma-separated-values, text/plain"),
                             placeholder = " No file selected",
                             multiple = TRUE,
                             width = "100%"
@@ -183,11 +183,13 @@ sv <- function(){
                     )
                   ),
                   br(),
-                  textOutput("text1"),
+                  #textOutput("text1"),
+                  #textOutput("text2"),
                   splitLayout(cellWidths = c("25%", "25%", "25%", "25%"),
                               numericInput('size.min', 'Minimum SV size (bp)', 0, 0),
                               numericInput('size.max', 'Maximum SV size (bp)', svsize.max, svsize.max),
-                              downloadButton('downloadData', 'Download annotated VCF'),
+                              downloadButton('downloadvcf', 'Download annotated VCF'),
+                              downloadButton('downloadcsv', 'Download annotated CSV'),
                               downloadButton('downloadPlot', 'Download Plots')
                   ),
                   checkboxGroupInput('svtypes', "SV type", svtypes, svtypes, inline = TRUE),
@@ -217,31 +219,85 @@ sv <- function(){
     ))
   server <- function(input, output, session){
     output$text1 <- renderText({
-      paste0(input$file[1])
+      paste0(input$file)
     })
-    annot.rdata = 'annotation_data.RData'
-    out.vcf = 'clinical-sv-annotated.vcf'
-    out.csv = 'clinical-sv-table.csv'
-    output$newvcf <- renderDataTable(annotate_vcf(paste0(input$file[1]),
-                                                  annot.rdata,
-                                                  out.vcf,
-                                                  out.csv))
+    output$text2 <- renderText({
+      readSVvcf(paste0(input$file$datapath), out.fmt='vcf', keep.ids=TRUE)
+    })
+
+
+    output$newvcf <- renderDataTable({
+      req(input$file$datapath)
+      annot.rdata <- 'annotation_data.RData'
+      out.vcf <- 'clinical-sv-annotated.vcf'
+      out.csv <- 'clinical-sv-table.csv'
+      load(annot.rdata)
+
+      ## read VCF
+      suppressWarnings(suppressMessages(library(sveval)))
+      suppressWarnings(suppressMessages(library(GenomicRanges)))
+      vcf.o = readSVvcf(input$file$datapath, out.fmt='vcf', keep.ids=TRUE)
+
+      ## make sure chromosomes are in the form 'chrX'
+      if(all(!grepl('chr', seqlevels(vcf.o)))){
+        seqlevels(vcf.o) = paste0('chr', seqlevels(vcf.o))
+      }
+
+      ## annotate gene overlapped by SVs
+      source('annotate_genes.R')
+      vcf.o = annotate_genes(vcf.o, genc)
+
+      ## annotate frequency
+      source('annotate_frequency.R')
+      vcf.o = annotate_frequency(vcf.o, gnomad)
+
+      ## annotate known clinical SVs
+      source('annotate_known_clinical_SVs.R')
+      vcf.o = annotate_known_clinical_SVs(vcf.o, clinsv)
+
+      ## clinical ranks, to order the SVs and select top 5 for example
+      source('annotate_clinical_score.R')
+      vcf.o = annotate_clinical_score(vcf.o,genc)
+
+      ## write annotated VCF
+
+
+      ## write tables
+      svs <- tibble(gene=info(vcf.o)$GENE,
+                   variant_id=names(vcf.o),
+                   chr=as.character(seqnames(vcf.o)),
+                   start=start(vcf.o),
+                   end=end(vcf.o),
+                   size=abs(unlist(lapply(info(vcf.o)$SVLEN, '[', 1))),
+                   frequency=info(vcf.o)$AF,
+                   svtype=info(vcf.o)$SVTYPE,
+                   clinsv=info(vcf.o)$CLINSV,
+                   clinrk=info(vcf.o)$CLINRK) %>%
+        arrange(clinrk)
+      return(svs)
+      })
 
 
     observeEvent(input$submit, {
       updateTabsetPanel(session = session, inputId = "tabs", selected = "Annotated")
     })
 
-    output$downloadData <- downloadHandler(
+    output$downloadvcf <- downloadHandler(
       filename = function() {
         paste('data-', Sys.Date(), '.vcf', sep='')
       },
       content = function(con) {
-        write.csv(annotate_vcf(paste0(input$file[1]),
-                               annot.rdata,
-                               out.vcf,
-                               out.csv),con)
+       writeVcf(vcf.o, con)
        }
+    )
+
+    output$downloadcsv <- downloadHandler(
+      filename = function() {
+        paste('data-', Sys.Date(), '.csv', sep='')
+      },
+      content = function(con) {
+        write.csv(svs,con)
+      }
     )
 
     output$downloadPlot <- downloadHandler(
