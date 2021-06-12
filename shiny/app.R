@@ -3,58 +3,12 @@ library(tippy)
 library(shinythemes)
 library(tidyverse)
 library(tidygraph)
+library(shinyjs)
 
-annotate_vcf <- function(in.vcf, annot.rdata, out.vcf, out.csv){
-
-  ## see prepare_annotation_data.R
-  load(annot.rdata)
-
-  ## read VCF
-  suppressWarnings(suppressMessages(library(sveval)))
-  suppressWarnings(suppressMessages(library(GenomicRanges)))
-  vcf.o = readSVvcf(in.vcf, out.fmt='vcf', keep.ids=TRUE)
-
-  ## make sure chromosomes are in the form 'chrX'
-  if(all(!grepl('chr', seqlevels(vcf.o)))){
-    seqlevels(vcf.o) = paste0('chr', seqlevels(vcf.o))
-  }
-
-  ## annotate gene overlapped by SVs
-  source('annotate_genes.R')
-  vcf.o = annotate_genes(vcf.o, genc)
-
-  ## annotate frequency
-  source('annotate_frequency.R')
-  vcf.o = annotate_frequency(vcf.o, gnomad)
-
-  ## annotate known clinical SVs
-  source('annotate_known_clinical_SVs.R')
-  vcf.o = annotate_known_clinical_SVs(vcf.o, clinsv)
-
-  ## clinical ranks, to order the SVs and select top 5 for example
-  # source('annotate_clinical_score.R')
-  # vcf.o = annotate_clinical_score(vcf.o,genc)
-
-  ## write annotated VCF
-  writeVcf(vcf.o, file=out.vcf)
-
-  ## write tables
-  svs = tibble(gene=info(vcf.o)$GENE,
-               variant_id=names(vcf.o),
-               chr=as.character(seqnames(vcf.o)),
-               start=start(vcf.o),
-               end=end(vcf.o),
-               size=abs(unlist(lapply(info(vcf.o)$SVLEN, '[', 1))),
-               frequency=info(vcf.o)$AF,
-               svtype=info(vcf.o)$SVTYPE,
-               clinsv=info(vcf.o)$CLINSV,
-               clinrk=info(vcf.o)$CLINRK) %>%
-    arrange(clinrk)
-
-  write.table(svs, file=out.csv, sep=',', quote=TRUE, row.names=FALSE)
-  svs
-}
-
+annot.rdata <- 'annotation_data.RData'
+out.vcf <- 'clinical-sv-annotated.vcf'
+out.csv <- 'clinical-sv-table.csv'
+load(annot.rdata)
 
 sv <- function(){
 
@@ -106,7 +60,8 @@ sv <- function(){
   svsize.max = 1e9
 
   ui <- shinyUI(
-    tagList(tags$head(tags$style(type = 'text/css','.navbar-brand{display:none;}')),
+    tagList(
+      tags$head(tags$style(type = 'text/css','.navbar-brand{display:none;}')),
             fluidPage(
               title = "SVCall",
               fluid = TRUE,
@@ -185,14 +140,15 @@ sv <- function(){
                   br(),
                   #textOutput("text1"),
                   #textOutput("text2"),
-                  splitLayout(cellWidths = c("25%", "25%", "25%", "25%"),
-                              numericInput('size.min', 'Minimum SV size (bp)', 0, 0),
-                              numericInput('size.max', 'Maximum SV size (bp)', svsize.max, svsize.max),
+                  splitLayout(
                               downloadButton('downloadvcf', 'Download annotated VCF'),
                               downloadButton('downloadcsv', 'Download annotated CSV'),
                               downloadButton('downloadPlot', 'Download Plots')
                   ),
-                  checkboxGroupInput('svtypes', "SV type", svtypes, svtypes, inline = TRUE),
+                  a(id = "toggleAdvanced", "Show/hide advanced info"),
+                  shinyjs::hidden(div(id = "advanced",
+                  checkboxGroupInput('svtypes', "SV type", svtypes, svtypes, inline = TRUE)
+                  )),
                   fluidRow(column(7,dataTableOutput('newvcf'))
                   ),
                   br(),
@@ -218,6 +174,11 @@ sv <- function(){
             )
     ))
   server <- function(input, output, session){
+
+    observe({
+      shinyjs::toggleState("submit", !is.null(input$file) && input$file != "")
+    })
+
     output$text1 <- renderText({
       paste0(input$file)
     })
@@ -228,10 +189,7 @@ sv <- function(){
 
     output$newvcf <- renderDataTable({
       req(input$file$datapath)
-      annot.rdata <- 'annotation_data.RData'
-      out.vcf <- 'clinical-sv-annotated.vcf'
-      out.csv <- 'clinical-sv-table.csv'
-      load(annot.rdata)
+
 
       ## read VCF
       suppressWarnings(suppressMessages(library(sveval)))
@@ -300,11 +258,15 @@ sv <- function(){
       }
     )
 
+    shinyjs::onclick("toggleAdvanced", shinyjs::toggle(id = "advanced", anim = TRUE))
+
     output$downloadPlot <- downloadHandler(
       filename = function() { paste(input$dataset, '.png', sep='') },
       content = function(file) {
         device <- function(..., width, height) grDevices::png(..., width = width, height = height, res = 300, units = "in")
         ggsave(file, plot = plotInput(), device = device)
+
+
 
 
 
