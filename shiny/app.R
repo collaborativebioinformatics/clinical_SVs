@@ -10,8 +10,6 @@ out.vcf <- 'clinical-sv-annotated.vcf'
 out.csv <- 'clinical-sv-table.csv'
 load(annot.rdata)
 
-sv <- function(){
-
   ## head
   head <- tagList(
     tags$link(
@@ -265,18 +263,9 @@ sv <- function(){
       content = function(file) {
         device <- function(..., width, height) grDevices::png(..., width = width, height = height, res = 300, units = "in")
         ggsave(file, plot = plotInput(), device = device)
-
-
-
-
-
-
-
       }
     )
   }
-
   shinyApp(ui, server)
-}
-sv()
+
 ####
