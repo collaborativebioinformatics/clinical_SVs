@@ -278,5 +278,5 @@ sv <- function(){
 
   shinyApp(ui, server)
 }
-
+sv()
 ####
