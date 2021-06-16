@@ -4,7 +4,7 @@ library(shinythemes)
 library(tidyverse)
 library(tidygraph)
 library(shinyjs)
-
+library(particlesjs)
 annot.rdata <- 'annotation_data.RData'
 out.vcf <- 'clinical-sv-annotated.vcf'
 out.csv <- 'clinical-sv-table.csv'
