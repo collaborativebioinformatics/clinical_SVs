@@ -14,7 +14,7 @@ if(length(args) > 0){
 message('Gene annotation from gencode...')
 ##
 if(!file.exists('gencode.v35.annotation.gff3.gz')){
-  download.file('ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_35/gencode.v35.annotation.gff3.gz', 'gencode.v35.annotation.gff3.gz')
+  download.file('ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_35/gencode.v35.annotation.gff3.gz', 'gencode.v35.annotation.gff3.gz', method='wget')
 }
 genc.all = import('gencode.v35.annotation.gff3.gz')
 
@@ -54,9 +54,9 @@ gnomad = gnomad %>% select(-qual) %>% makeGRangesFromDataFrame(keep.extra.column
 message('Known clinical SVs...')
 ##
 if(!file.exists('nstd102.GRCh38.variant_call.tsv.gz')){
-  download.file('https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/tsv/nstd102.GRCh38.variant_call.tsv.gz', 'nstd102.GRCh38.variant_call.tsv.gz')
+  download.file('ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/tsv/nstd102.GRCh38.variant_call.tsv.gz', 'nstd102.GRCh38.variant_call.tsv.gz', method='wget')
 }
-clinsv = read.table('nstd102.GRCh38.variant_call.tsv.gz', as.is=TRUE, skip=1, comment='', sep='\t', header=TRUE)
+clinsv = read.table('nstd102.GRCh38.variant_call.tsv.gz', as.is=TRUE, skip=1, quote='', comment='', sep='\t', header=TRUE)
 clinsv = clinsv[, c(1,3,8,10:16,37)] %>%
   rename(dbvar_id=X.variant_call_accession) %>%
   mutate(chr=paste0('chr', chr), 
@@ -81,7 +81,7 @@ clinsv = clinsv[, c(1,3,8,10:16,37)] %>%
 message('Gene with high probability of loss-of-function intolerance...')
 ##
 if(!file.exists('gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz')){
-  download.file('https://azureopendatastorage.blob.core.windows.net/gnomad/release/2.1.1/constraint/gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz', 'gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz')
+  download.file('https://azureopendatastorage.blob.core.windows.net/gnomad/release/2.1.1/constraint/gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz', 'gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz', method='wget')
 }
 pli = read.table('gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz', header=TRUE, as.is=TRUE, sep='\t')
 gene.pli = pli %>% filter(pLI>.9) %>% .$gene %>% unique
@@ -90,7 +90,7 @@ gene.pli = pli %>% filter(pLI>.9) %>% .$gene %>% unique
 message('Gene associated with phenotype in OMIM...')
 ##
 if(!file.exists('gene_list_terms.txt.gz')){
-  download.file('https://maayanlab.cloud/static/hdfs/harmonizome/data/omim/gene_list_terms.txt.gz', 'gene_list_terms.txt.gz')
+  download.file('https://maayanlab.cloud/static/hdfs/harmonizome/data/omim/gene_list_terms.txt.gz', 'gene_list_terms.txt.gz', method='wget')
 }
 omim = read.table('gene_list_terms.txt.gz', header=TRUE, as.is=TRUE, sep='\t')
 gene.omim = unique(omim$GeneSym)

@@ -72,20 +72,20 @@ suppressWarnings(suppressMessages(easypackages::packages(pkgs, prompt = FALSE)))
 
 ## Quick Start
 
-####To annotate a VCF with SV calls:
+#### To annotate a VCF with SV calls:
 
 ```
 Rscript R/prepare_annotation_data.R annotation_data.RData   ## download and prepare annotations (makes 'annotation_data.RData')
 Rscript R/annotate_vcf.R input.vcf annotation_data.RData output.vcf output.csv
 ```
 
-####For example, for the [test data](#test-data)
+#### For example, for the [test data](#test-data)
 
 ```
 Rscript R/annotate_vcf.R testdata/test.input.vcf annotation_data.RData testdata/test.clinical.sv.vcf testdata/test.clinical.sv.csv
 ```
 
-####Test gene disease ontology, gene-disease association and pathways by KEGG and Reactome
+#### Test gene disease ontology, gene-disease association and pathways by KEGG and Reactome
 
 ```
 cd demo_output
