@@ -185,10 +185,8 @@ load(annot.rdata)
     })
 
 
-    output$newvcf <- renderDataTable({
+    dataset <- reactive({
       req(input$file$datapath)
-
-
       ## read VCF
       suppressWarnings(suppressMessages(library(sveval)))
       suppressWarnings(suppressMessages(library(GenomicRanges)))
@@ -216,7 +214,7 @@ load(annot.rdata)
       vcf.o = annotate_clinical_score(vcf.o,genc)
 
       ## write annotated VCF
-
+      writeVcf(vcf.o, file=out.vcf)
 
       ## write tables
       svs <- tibble(gene=info(vcf.o)$GENE,
@@ -233,6 +231,12 @@ load(annot.rdata)
       return(svs)
       })
 
+    output$newvcf <- renderDataTable({
+      dataset()
+    })
+      vcf.o <- readSVvcf("clinical-sv-annotated.vcf", out.fmt='vcf', keep.ids=TRUE)
+     # vcf.o <- readVcf("clinical-sv-annotated.vcf")
+     # vr.vcf <- makeVRangesFromGRanges(vcf.o)
 
     observeEvent(input$submit, {
       updateTabsetPanel(session = session, inputId = "tabs", selected = "Annotated")
@@ -240,7 +244,7 @@ load(annot.rdata)
 
     output$downloadvcf <- downloadHandler(
       filename = function() {
-        paste('data-', Sys.Date(), '.vcf', sep='')
+        paste(input$file, '_annotated', '.vcf', sep='')
       },
       content = function(con) {
        writeVcf(vcf.o, con)
@@ -249,10 +253,10 @@ load(annot.rdata)
 
     output$downloadcsv <- downloadHandler(
       filename = function() {
-        paste('data-', Sys.Date(), '.csv', sep='')
+        paste(input$file, '_annotated', '.csv', sep='')
       },
       content = function(con) {
-        write.csv(svs,con)
+        write.csv(dataset(),con)
       }
     )
 
