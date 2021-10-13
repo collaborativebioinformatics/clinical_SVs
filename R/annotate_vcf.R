@@ -52,6 +52,7 @@ source(paste0(scripts.dir, 'annotate_clinical_score.R'))
 vcf.o = annotate_clinical_score(vcf.o)
 
 ## write annotated VCF
+meta(header(vcf.o))$fileformat = "VCFv4.1"
 writeVcf(vcf.o, file=out.vcf)
 
 ## write tables
