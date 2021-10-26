@@ -92,6 +92,16 @@ cd demo_output
 Rscript ../R/geneFunctionalAnnotation.R listofENSEMBLID.txt 0.05 EMSEMBL
 ```
 
+#### One can use updated script with SVtype and directly use input CSV file as out from annotate_vcf.R
+
+```
+cd R/
+Rscript ../R/GeneAnnotationFromCSV.R -h
+
+USAGE: Rscript GeneAnnotationFromCSV.R <CSV output from annotate_vcf.R> <pvalueCutoff> <svtype> <chrom>
+
+Example: Rscript ../R/GeneAnnotationFromCSV.R ../testdata/test.output.csv 0.1 DUP chr12
+```
 
 ## Component Details
 
